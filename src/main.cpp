@@ -5,7 +5,7 @@
 #include <RF24_config.h>
 //https://nrf24.github.io/RF24/classRF24.html
 
-//Version 1.1 2021/2/7
+//Version 1.2 2021/2/8
 
 /*
                         y_input_forward_max
@@ -45,9 +45,9 @@ x_input_left_max --------                  ---------- x_input_right_max
 
 //output setting//=========================================
 //x output
-#define x_output_center 2000
-#define x_output_left_max 1500
-#define x_output_right_max 2500
+#define x_output_center 1450
+#define x_output_left_max 500
+#define x_output_right_max 2400
 //y output
 #define y_output_center 0
 #define y_output_forward_max 255
@@ -73,6 +73,7 @@ void init_nrf24l01(){
   radio.setChannel(120);
   radio.stopListening();
   radio.printDetails();
+  delay(3000);
 }
 
 //controller function//====================================================
@@ -125,9 +126,15 @@ void setup() {
 void loop() {
   int16_t x_read = analogRead(x_input_pin);
   int16_t y_read = analogRead(y_input_pin);
+  Serial.print("input_x ");
+  Serial.println(x_read);
+  Serial.print("input_y ");
+  Serial.println(y_read);
   controller_map(x_read,y_read);
   radio.write(&main_data, sizeof(main_data) );
+  Serial.print("output_x ");
   Serial.println(main_data.x_axis);
+  Serial.print("output_y ");
   Serial.println(main_data.y_axis);
-  delay(10);
+  delay(100);
 }
