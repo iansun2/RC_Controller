@@ -4,8 +4,11 @@
 #include <RF24.h>
 #include <RF24_config.h>
 //https://nrf24.github.io/RF24/classRF24.html
+
+//Version 1.1 2021/2/7
+
 /*
-                          y_input_forward_max
+                        y_input_forward_max
                                  |
                                  |
                                  |
@@ -15,12 +18,13 @@ x_input_left_max --------                  ---------- x_input_right_max
                                  |
                                  |
                                  |
-                          y_input_backward_max
+                        y_input_backward_max
 */
+
 //pin setting//=========================================
 //NRF24L01
-#define CE_pin 6
-#define CSN_pin 7
+#define CE_pin 7
+#define CSN_pin 6
 //control input
 #define x_input_pin A0
 #define y_input_pin A1
@@ -41,7 +45,7 @@ x_input_left_max --------                  ---------- x_input_right_max
 
 //output setting//=========================================
 //x output
-#define x_output_center 0
+#define x_output_center 2000
 #define x_output_left_max 1500
 #define x_output_right_max 2500
 //y output
@@ -111,7 +115,7 @@ void controller_map(int16_t x_input,int16_t y_input){
 
 //setup//=================================================================
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   init_nrf24l01();
   main_data.x_axis = 0;
   main_data.y_axis = 0;
@@ -123,5 +127,7 @@ void loop() {
   int16_t y_read = analogRead(y_input_pin);
   controller_map(x_read,y_read);
   radio.write(&main_data, sizeof(main_data) );
+  Serial.println(main_data.x_axis);
+  Serial.println(main_data.y_axis);
   delay(10);
 }
